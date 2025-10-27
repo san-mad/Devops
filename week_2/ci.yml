@@ -1,0 +1,32 @@
+
+stages:
+  - test
+  - build
+  - Deploy
+
+run_tests:
+  stage: test
+  image: node:16
+  script:
+    - npm install
+    - npm test
+
+build_app:
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+    expire_in:
+  only:
+    - main
+    - 1 hour
+
+deploy_staging:
+  stage: Deploy
+  script:
+    - echo "Deploying to staging server..."
+  when: manual
+  only:
+    - main
